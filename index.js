@@ -1,21 +1,30 @@
-const express=require("express");
+const express = require('express');
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 
-const app=express();
+const url = 'mongodb://localhost:27017/test';
+const client = new MongoClient(url, { useNewUrlParser: true });
+client.connect((err) => {
+  if (err) {
+    console.error(err);
+    return;
+  }
+  console.log('Connected to MongoDB');
+});
+const app = express();
+app.get('/users', (req, res) => {
+  const db = client.db();
+  db.collection('sales').find().toArray((err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Internal server error');
+      return;
+    }
+    res.send(data);
+  });
+});
 
-app.get("/",(req,res)=>{
-  res.send("hello world");
-  console.log(req.hostname);
-})
-app.post("/",(req,res)=>{
-  res.send("Got an post request");
-  console.log(req.hostname);
-})
-app.put("/hello",(req,res)=>{
-  res.send("Got an PUT request");
-  console.log(req.hostname);
-})
-app.delete("/hello",(req,res)=>{
-  res.send("Got an DELETE request");
-  console.log(req.hostname);
-})
-app.listen(3000);
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
+});
+

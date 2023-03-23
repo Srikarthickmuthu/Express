@@ -1,0 +1,35 @@
+// use('product')
+
+// db.product.drop()
+
+// db.product.insert({
+//   	regNo: "3014",
+// 	name: "Test Student",
+// 	course: {
+// 		courseName: "MCA",
+// 		duration: "3 Years"
+// 	},
+// 	address: {
+// 		city: "Bangalore",
+// 		state: "KA",
+// 		country: "India"
+// 	}
+// })
+
+db.product.find();
+
+// db.product.insert({
+//       	regNo: "3015",
+// 	name: "Test Student2",
+// 	course: {
+// 		courseName: "MCA",
+// 		duration: "3 Years"
+// 	},
+// 	address: {
+// 		city: "Bangalore",
+// 		state: "KA",
+// 		country: "India"
+//     }
+// })
+
+// db.product.find({"regNo":"3014"})
