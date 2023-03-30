@@ -1,0 +1,41 @@
+use("mongoDb")
+
+db.sample.drop()
+
+db.sample.insertOne({
+    "name":"karthick",
+    "age":22
+})
+db.sample.insertMany([{
+    "name":"kumar",
+    "age":22
+},{
+    "name":"sri",
+    "age":23
+}])
+
+db.sample.updateOne({age:23},{
+$set: {
+  age: 28
+}})
+
+db.sample.updateMany({age:22},{$set:{gender:"male"}});
+
+db.sample.deleteOne({age:28})
+
+const operation=[
+    {
+        insertOne:{
+            "name":"mugesh",
+            "age":25
+        }
+    },
+    {
+        updateOne:{filter:{name:"mugesh"},update:{
+        $set: {
+          gender: "male"
+        }}
+    }}
+]
+db.sample.bulkWrite(operation);
+db.sample.find();
