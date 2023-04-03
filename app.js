@@ -1,41 +1,32 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const express = require("express"),
+  app = express(),
+  mongoose = require("mongoose"),
+  userRoutes = require("./Auth/routes/user");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+//Connect to database
+try {
+  mongoose.connect("mongodb://localhost:27017/usersdb", {
+    useUnifiedTopology: true,
+    useNewUrlParser: true
+  });
+  console.log("connected to db");
+} catch (error) {
+  handleError(error);
+}
+process.on('unhandledRejection', error => {
+  console.log('unhandledRejection', error.message);
+});
 
-var app = express();
-
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-app.use(logger('dev'));
+// parse requests of content-type - application/json
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({
+  extended: true
+}));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+//using user route
+app.use(userRoutes);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
+app.listen(8000,()=>{
+  console.log("Server is running on the port 8000")
 });
-
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
-
-module.exports = app;
